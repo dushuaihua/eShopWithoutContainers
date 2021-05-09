@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using System;
 
 namespace Identity.API
@@ -24,8 +23,9 @@ namespace Identity.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = Configuration["ConnectionString"];
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration["ConnectionString"],
+                options.UseSqlServer(connectionString,
                 sqlServerOptionsAction: sqlOptions =>
                 {
                     sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
@@ -42,16 +42,12 @@ namespace Identity.API
                 options.Authentication.CookieLifetime = TimeSpan.FromHours(2);
             }).AddAspNetIdentity<ApplicationUser>().AddConfigurationStore(options =>
             {
-                options.ConfigureDbContext = builder => builder.UseSqlServer(Configuration["ConnectionString"], sqlServerOptionsAction: sqlOptions =>
+                options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString, sqlServerOptionsAction: sqlOptions =>
                 {
                     sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                 });
             });
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Identity.API", Version = "v1" });
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,12 +56,12 @@ namespace Identity.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity.API v1"));
             }
 
             app.UseHttpsRedirection();
 
+            //Adds Identity Server
+            app.UseIdentityServer();
             app.UseRouting();
 
             app.UseAuthorization();
