@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Identity.API.Models.AccountViewModels
+namespace Identity.API.Models
 {
-    public class LoginViewModel
+    public class SignInInputModel
     {
         [Required]
         [EmailAddress]
