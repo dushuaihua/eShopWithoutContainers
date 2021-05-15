@@ -1,7 +1,9 @@
 ﻿using Identity.API.Models;
 using Identity.API.Services;
 using IdentityServer4.Services;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 
@@ -10,45 +12,35 @@ namespace Identity.API.Controllers
     public class HomeController : Controller
     {
         private readonly IIdentityServerInteractionService _interactionService;
-        private readonly IOptionsSnapshot<AppSettings> _settings;
-        private readonly IRedirectService _redirectService;
+        private readonly IWebHostEnvironment _environment;
 
-        public HomeController(IIdentityServerInteractionService interactionService,
-            IOptionsSnapshot<AppSettings> settings, IRedirectService redirectService)
+        public HomeController(IIdentityServerInteractionService interactionService, IWebHostEnvironment environment)
         {
             _interactionService = interactionService;
-            _settings = settings;
-            _redirectService = redirectService;
+            _environment = environment;
         }
 
-        public IActionResult Index(string returnUrl)
+        public IActionResult Index()
         {
-            return View();
+            if (!_environment.IsProduction())
+            {
+                return View();
+            }
+            return NotFound();
         }
 
-        public IActionResult ReturnToOriginalApplication(string returnUrl)
-        {
-            if (returnUrl is not null)
-            {
-                return Redirect(_redirectService.ExtractRedirectUriFromReturnUrl(returnUrl));
-            }
-            else
-            {
-                return RedirectToAction("Index", "Home");
-            }
-        }
 
         public async Task<IActionResult> Error(string errorId)
         {
-            var vm = new ErrorViewModel();
+            var model = new ErrorViewModel();
 
             var message = await _interactionService.GetErrorContextAsync(errorId);
 
             if (message is not null)
             {
-                vm.Error = message;
+                model.Error = message;
             }
-            return View("Error", vm);
+            return View("Error", model);
         }
     }
 }

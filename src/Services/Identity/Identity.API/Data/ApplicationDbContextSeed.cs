@@ -1,8 +1,5 @@
 ﻿using Identity.API.Models;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,54 +10,41 @@ namespace Identity.API.Data
     public class ApplicationDbContextSeed
     {
         private readonly IPasswordHasher<ApplicationUser> _passwordHasher = new PasswordHasher<ApplicationUser>();
-        public async Task SeedAsync(ApplicationDbContext context, IWebHostEnvironment env, ILogger<ApplicationDbContextSeed> logger, IOptions<AppSettings> settings, int? retry = 0)
+        public async Task SeedAsync(ApplicationDbContext context)
         {
-            int retryForAvaiability = retry.Value;
-            try
+            if (!context.Users.Any())
             {
-                var useCustomizationData = settings.Value.UseCustomizationData;
-                var contentRootPath = env.ContentRootPath;
-                var webRoot = env.WebRootPath;
-
-                if (!context.Users.Any())
-                {
-                    context.Users.AddRange(GetDefaultUser());
-                    await context.SaveChangesAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "EXCEPTION ERROR while migrating {DbContextName}", nameof(ApplicationDbContext));
+                context.Users.AddRange(GetDefaultUser());
+                await context.SaveChangesAsync();
             }
         }
-
         private IEnumerable<ApplicationUser> GetDefaultUser()
         {
             var user =
             new ApplicationUser()
             {
+                CardHolderName = "DemoUser",
+                CardNumber = "4012888888881881",
+                CardType = 1,
+                City = "Redmond",
+                Country = "U.S.",
                 Email = "demouser@microsoft.com",
+                Expiration = "12/21",
                 Id = Guid.NewGuid().ToString(),
+                LastName = "DemoLastName",
+                Name = "DemoUser",
                 PhoneNumber = "1234567890",
                 UserName = "demouser@microsoft.com",
+                ZipCode = "98052",
+                State = "WA",
+                Street = "15703 NE 61st Ct",
+                SecurityNumber = "535",
                 NormalizedEmail = "DEMOUSER@MICROSOFT.COM",
                 NormalizedUserName = "DEMOUSER@MICROSOFT.COM",
                 SecurityStamp = Guid.NewGuid().ToString("D"),
-                //ZipCode = "98052",
-                //State = "WA",
-                //Street = "15703 NE 61st Ct",
-                //SecurityNumber = "535",
-                //Expiration = "12/21",
-                //CardHolderName = "DemoUser",
-                //CardNumber = "4012888888881881",
-                //CardType = 1,
-                //City = "Redmond",
-                //Country = "U.S.",
-                //LastName = "DemoLastName",
-                //Name = "DemoUser",
             };
 
-            user.PasswordHash = _passwordHasher.HashPassword(user, "Pass@word1");
+            user.PasswordHash = _passwordHasher.HashPassword(user, "11111111");
 
             return new List<ApplicationUser>()
             {

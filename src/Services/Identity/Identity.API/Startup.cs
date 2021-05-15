@@ -1,5 +1,6 @@
 using Identity.API.Data;
 using Identity.API.Models;
+using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -7,7 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
+using Microsoft.Extensions.Options;
+using System.Reflection;
 
 namespace Identity.API
 {
@@ -19,57 +21,70 @@ namespace Identity.API
         }
 
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllersWithViews();
+
             var connectionString = Configuration["ConnectionString"];
+
+
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString,
-                sqlServerOptionsAction: sqlOptions =>
-                {
-                    sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-                }));
+            {
+                options.UseSqlServer(connectionString);
+            });
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-            //Adds Identity Server
-            services.AddIdentityServer(options =>
-            {
 
-                options.IssuerUri = "null";
-                options.Authentication.CookieLifetime = TimeSpan.FromHours(2);
-            }).AddAspNetIdentity<ApplicationUser>().AddConfigurationStore(options =>
-            {
-                options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString, sqlServerOptionsAction: sqlOptions =>
+            services.AddIdentityServer()
+                .AddConfigurationStore(options =>
                 {
-                    sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-                });
-            });
-            services.AddControllers();
+                    options.ConfigureDbContext = b => b.UseSqlServer(connectionString);
+                })
+                .AddOperationalStore(options =>
+                {
+                    options.ConfigureDbContext = b => b.UseSqlServer(connectionString);
+                })
+                .AddAspNetIdentity<ApplicationUser>()
+                .AddDeveloperSigningCredential();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // this will do the initial DB population
+            InitializeDatabase(app, env);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-
-            //Adds Identity Server
-            app.UseIdentityServer();
+            app.UseStaticFiles();
             app.UseRouting();
 
+            app.UseIdentityServer();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapDefaultControllerRoute();
             });
+        }
+
+        private void InitializeDatabase(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
+                var configContext = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+                configContext.Database.Migrate();
+                new ConfigurationDbContextSeed().SeedAsync(configContext, Configuration).Wait();
+                var identityDbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                identityDbContext.Database.Migrate();
+                var settings = serviceScope.ServiceProvider.GetRequiredService<IOptions<AppSettings>>();
+                new ApplicationDbContextSeed().SeedAsync(identityDbContext).Wait();
+            }
         }
     }
 }
