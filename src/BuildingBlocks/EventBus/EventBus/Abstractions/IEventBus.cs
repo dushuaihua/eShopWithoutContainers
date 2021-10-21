@@ -6,11 +6,11 @@ namespace EventBus.Abstractions
     {
         void Publish(IntegrationEvent @event);
 
-        void SubScribe<T, TH>()
+        void Subscribe<T, TH>()
             where T : IntegrationEvent
             where TH : IIntegrationEventHandler<T>;
 
-        void SubScribeDynamic<TH>(string eventName)
+        void SubscribeDynamic<TH>(string eventName)
             where TH : IDynamicIntegrationEventHandler;
 
         void Unsubscribe<T, TH>()
