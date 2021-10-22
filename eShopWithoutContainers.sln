@@ -25,9 +25,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventBus", "src\BuildingBlo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0F8CB9AB-2CB0-4E6D-BDB1-692E7539EA18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventBus.Tests", "src\BuildingBlocks\EventBus\EventBus.Tests\EventBus.Tests.csproj", "{8A3FB77E-BBFA-4F9A-8492-AE9CDDDED607}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventBus.Tests", "src\BuildingBlocks\EventBus\EventBus.Tests\EventBus.Tests.csproj", "{8A3FB77E-BBFA-4F9A-8492-AE9CDDDED607}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventBusRabbitMQ", "src\BuildingBlocks\EventBus\EventBusRabbitMQ\EventBusRabbitMQ.csproj", "{B4DDA2D9-D2FD-414B-B919-709E8DB5A603}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventBusRabbitMQ", "src\BuildingBlocks\EventBus\EventBusRabbitMQ\EventBusRabbitMQ.csproj", "{B4DDA2D9-D2FD-414B-B919-709E8DB5A603}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventBusServiceBus", "src\BuildingBlocks\EventBus\EventBusServiceBus\EventBusServiceBus.csproj", "{5DCF9245-ABDD-4D60-B440-4B364DD7CA9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,10 @@ Global
 		{B4DDA2D9-D2FD-414B-B919-709E8DB5A603}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4DDA2D9-D2FD-414B-B919-709E8DB5A603}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4DDA2D9-D2FD-414B-B919-709E8DB5A603}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DCF9245-ABDD-4D60-B440-4B364DD7CA9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DCF9245-ABDD-4D60-B440-4B364DD7CA9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DCF9245-ABDD-4D60-B440-4B364DD7CA9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DCF9245-ABDD-4D60-B440-4B364DD7CA9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +78,7 @@ Global
 		{0F8CB9AB-2CB0-4E6D-BDB1-692E7539EA18} = {AA49CACD-90FB-4E5E-A9E6-B333B61F93E6}
 		{8A3FB77E-BBFA-4F9A-8492-AE9CDDDED607} = {0F8CB9AB-2CB0-4E6D-BDB1-692E7539EA18}
 		{B4DDA2D9-D2FD-414B-B919-709E8DB5A603} = {AA49CACD-90FB-4E5E-A9E6-B333B61F93E6}
+		{5DCF9245-ABDD-4D60-B440-4B364DD7CA9D} = {AA49CACD-90FB-4E5E-A9E6-B333B61F93E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {54B30645-11CD-4DB3-9C1F-63600C9748B0}
