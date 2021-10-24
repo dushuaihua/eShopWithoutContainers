@@ -31,7 +31,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventBusRabbitMQ", "src\Bui
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventBusServiceBus", "src\BuildingBlocks\EventBus\EventBusServiceBus\EventBusServiceBus.csproj", "{5DCF9245-ABDD-4D60-B440-4B364DD7CA9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationEventLogEF", "src\BuildingBlocks\EventBus\IntegrationEventLogEF\IntegrationEventLogEF.csproj", "{F3831996-1A71-4641-A7B3-3D4EED49C574}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationEventLogEF", "src\BuildingBlocks\EventBus\IntegrationEventLogEF\IntegrationEventLogEF.csproj", "{F3831996-1A71-4641-A7B3-3D4EED49C574}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebHost", "WebHost", "{7C863AEC-B06B-43A2-A75C-40D1671DF70A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebHost.Customization", "src\BuildingBlocks\WebHost\WebHost.Customization\WebHost.Customization.csproj", "{BB419AEF-257A-4DA4-9A92-306EE2538147}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Devspaces", "Devspaces", "{EE5AAC5B-E411-40BB-B0AC-C8CD95D13BB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devspaces.Support", "src\BuildingBlocks\Devspaces\Devspaces.Support\Devspaces.Support.csproj", "{6AAD588C-20DA-435A-B255-2ADB9E0BAF83}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +75,14 @@ Global
 		{F3831996-1A71-4641-A7B3-3D4EED49C574}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3831996-1A71-4641-A7B3-3D4EED49C574}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3831996-1A71-4641-A7B3-3D4EED49C574}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB419AEF-257A-4DA4-9A92-306EE2538147}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB419AEF-257A-4DA4-9A92-306EE2538147}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB419AEF-257A-4DA4-9A92-306EE2538147}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB419AEF-257A-4DA4-9A92-306EE2538147}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AAD588C-20DA-435A-B255-2ADB9E0BAF83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AAD588C-20DA-435A-B255-2ADB9E0BAF83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AAD588C-20DA-435A-B255-2ADB9E0BAF83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AAD588C-20DA-435A-B255-2ADB9E0BAF83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,6 +102,10 @@ Global
 		{B4DDA2D9-D2FD-414B-B919-709E8DB5A603} = {AA49CACD-90FB-4E5E-A9E6-B333B61F93E6}
 		{5DCF9245-ABDD-4D60-B440-4B364DD7CA9D} = {AA49CACD-90FB-4E5E-A9E6-B333B61F93E6}
 		{F3831996-1A71-4641-A7B3-3D4EED49C574} = {AA49CACD-90FB-4E5E-A9E6-B333B61F93E6}
+		{7C863AEC-B06B-43A2-A75C-40D1671DF70A} = {7553B518-2C2D-45D0-902C-E3341E5D956A}
+		{BB419AEF-257A-4DA4-9A92-306EE2538147} = {7C863AEC-B06B-43A2-A75C-40D1671DF70A}
+		{EE5AAC5B-E411-40BB-B0AC-C8CD95D13BB4} = {7553B518-2C2D-45D0-902C-E3341E5D956A}
+		{6AAD588C-20DA-435A-B255-2ADB9E0BAF83} = {EE5AAC5B-E411-40BB-B0AC-C8CD95D13BB4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {54B30645-11CD-4DB3-9C1F-63600C9748B0}
