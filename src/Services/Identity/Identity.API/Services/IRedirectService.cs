@@ -1,7 +1,5 @@
-﻿namespace Identity.API.Services
+﻿namespace Identity.API.Services;
+public interface IRedirectService
 {
-    public interface IRedirectService
-    {
-        string ExtractRedirectUriFromReturnUrl(string url);
-    }
+    string ExtractRedirectUriFromReturnUrl(string url);
 }

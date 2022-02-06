@@ -1,34 +1,28 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Threading.Tasks;
-
-namespace IntegrationEventLogEF.Utilities
+﻿namespace IntegrationEventLogEF.Utilities;
+public class ResilientTransaction
 {
-    public class ResilientTransaction
+    private DbContext _context;
+
+    public ResilientTransaction(DbContext context)
     {
-        private DbContext _context;
+        _context = context ?? throw new ArgumentNullException(nameof(context));
+    }
 
-        public ResilientTransaction(DbContext context)
-        {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-        }
+    public static ResilientTransaction New(DbContext context)
+    {
+        return new ResilientTransaction(context);
+    }
 
-        public static ResilientTransaction New(DbContext context)
+    public async Task ExecuteAsync(Func<Task> action)
+    {
+        var strategy = _context.Database.CreateExecutionStrategy();
+        await strategy.ExecuteAsync(async () =>
         {
-            return new ResilientTransaction(context);
-        }
-
-        public async Task ExecuteAsync(Func<Task> action)
-        {
-            var strategy = _context.Database.CreateExecutionStrategy();
-            await strategy.ExecuteAsync(async () =>
+            using (var transaction = _context.Database.BeginTransaction())
             {
-                using (var transaction = _context.Database.BeginTransaction())
-                {
-                    await action();
-                    transaction.Commit();
-                }
-            });
-        }
+                await action();
+                transaction.Commit();
+            }
+        });
     }
 }

@@ -1,24 +1,20 @@
-﻿using System;
-
-namespace Catalog.API.Infrastructure.Exceptions
+﻿namespace Catalog.API.Infrastructure.Exceptions;
+public class CatalogDomainException : Exception
 {
-    public class CatalogDomainException : Exception
+    public CatalogDomainException()
     {
-        public CatalogDomainException()
-        {
 
-        }
+    }
 
-        public CatalogDomainException(string message)
-            : base(message)
-        {
+    public CatalogDomainException(string message)
+        : base(message)
+    {
 
-        }
+    }
 
-        public CatalogDomainException(string message, Exception innerException)
-        : base(message, innerException)
-        {
+    public CatalogDomainException(string message, Exception innerException)
+    : base(message, innerException)
+    {
 
-        }
     }
 }

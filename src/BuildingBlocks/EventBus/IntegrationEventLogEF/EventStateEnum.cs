@@ -1,10 +1,8 @@
-﻿namespace IntegrationEventLogEF
+﻿namespace IntegrationEventLogEF;
+public enum EventStateEnum
 {
-    public enum EventStateEnum
-    {
-        NotPublished = 0,
-        InProgress = 1,
-        Published = 2,
-        PublishedFaild = 3
-    }
+    NotPublished = 0,
+    InProgress = 1,
+    Published = 2,
+    PublishedFaild = 3
 }

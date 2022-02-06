@@ -1,26 +1,21 @@
-﻿using System;
-using System.Text.Json.Serialization;
-
-namespace EventBus.Events
+﻿namespace EventBus.Events;
+public record IntegrationEvent
 {
-    public record IntegrationEvent
+    public IntegrationEvent()
     {
-        public IntegrationEvent()
-        {
-            Id = Guid.NewGuid();
-            CreationDate = DateTime.UtcNow;
-        }
-
-        [JsonConstructor]
-        public IntegrationEvent(Guid id, DateTime createDate)
-        {
-            Id = id;
-            CreationDate = createDate;
-        }
-
-        [JsonInclude]
-        public Guid Id { get; set; }
-        [JsonInclude]
-        public DateTime CreationDate { get; set; }
+        Id = Guid.NewGuid();
+        CreationDate = DateTime.UtcNow;
     }
+
+    [JsonConstructor]
+    public IntegrationEvent(Guid id, DateTime createDate)
+    {
+        Id = id;
+        CreationDate = createDate;
+    }
+
+    [JsonInclude]
+    public Guid Id { get; set; }
+    [JsonInclude]
+    public DateTime CreationDate { get; set; }
 }

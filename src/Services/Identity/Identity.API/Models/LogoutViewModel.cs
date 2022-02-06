@@ -1,7 +1,5 @@
-﻿namespace Identity.API.Models
+﻿namespace Identity.API.Models;
+public class LogoutViewModel
 {
-    public class LogoutViewModel
-    {
-        public string LogoutId { get; set; }
-    }
+    public string LogoutId { get; set; }
 }

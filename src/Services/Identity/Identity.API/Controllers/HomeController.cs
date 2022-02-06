@@ -1,46 +1,35 @@
-﻿using Identity.API.Models;
-using Identity.API.Services;
-using IdentityServer4.Services;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using System.Threading.Tasks;
-
-namespace Identity.API.Controllers
+﻿namespace Identity.API.Controllers;
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly IIdentityServerInteractionService _interactionService;
+    private readonly IWebHostEnvironment _environment;
+
+    public HomeController(IIdentityServerInteractionService interactionService, IWebHostEnvironment environment)
     {
-        private readonly IIdentityServerInteractionService _interactionService;
-        private readonly IWebHostEnvironment _environment;
+        _interactionService = interactionService;
+        _environment = environment;
+    }
 
-        public HomeController(IIdentityServerInteractionService interactionService, IWebHostEnvironment environment)
+    public IActionResult Index()
+    {
+        if (!_environment.IsProduction())
         {
-            _interactionService = interactionService;
-            _environment = environment;
+            return View();
         }
+        return NotFound();
+    }
 
-        public IActionResult Index()
+
+    public async Task<IActionResult> Error(string errorId)
+    {
+        var model = new ErrorViewModel();
+
+        var message = await _interactionService.GetErrorContextAsync(errorId);
+
+        if (message is not null)
         {
-            if (!_environment.IsProduction())
-            {
-                return View();
-            }
-            return NotFound();
+            model.Error = message;
         }
-
-
-        public async Task<IActionResult> Error(string errorId)
-        {
-            var model = new ErrorViewModel();
-
-            var message = await _interactionService.GetErrorContextAsync(errorId);
-
-            if (message is not null)
-            {
-                model.Error = message;
-            }
-            return View("Error", model);
-        }
+        return View("Error", model);
     }
 }

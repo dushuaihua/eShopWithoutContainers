@@ -1,13 +1,7 @@
-﻿using EventBus.Events;
-using System.Threading.Tasks;
-
-namespace EventBus.Abstractions
+﻿namespace EventBus.Abstractions;
+public interface IIntegrationEventHandler { }
+public interface IIntegrationEventHandler<in TIntegratioinEvent> : IIntegrationEventHandler
+    where TIntegratioinEvent : IntegrationEvent
 {
-
-    public interface IIntegrationEventHandler { }
-    public interface IIntegrationEventHandler<in TIntegratioinEvent> : IIntegrationEventHandler
-        where TIntegratioinEvent : IntegrationEvent
-    {
-        Task Handle(TIntegratioinEvent @event);
-    }
+    Task Handle(TIntegratioinEvent @event);
 }

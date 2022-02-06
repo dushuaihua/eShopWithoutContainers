@@ -1,7 +1,5 @@
-﻿namespace Identity.API.Models
+﻿namespace Identity.API.Models;
+public class SignOutViewModel : SignOutInputModel
 {
-    public class SignOutViewModel : SignOutInputModel
-    {
-        public bool ShowSignOutPrompt { get; set; } = true;
-    }
+    public bool ShowSignOutPrompt { get; set; } = true;
 }

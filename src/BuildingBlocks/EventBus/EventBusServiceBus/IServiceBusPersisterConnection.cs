@@ -1,10 +1,6 @@
-﻿using Microsoft.Azure.ServiceBus;
-
-namespace EventBusServiceBus
+﻿namespace EventBusServiceBus;
+public interface IServiceBusPersisterConnection
 {
-    public interface IServiceBusPersisterConnection
-    {
-        ITopicClient TopicClient { get; }
-        ISubscriptionClient SubscriptionClient { get; }
-    }
+    ITopicClient TopicClient { get; }
+    ISubscriptionClient SubscriptionClient { get; }
 }

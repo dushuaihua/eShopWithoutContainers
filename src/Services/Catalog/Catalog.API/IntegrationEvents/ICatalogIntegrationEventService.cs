@@ -1,11 +1,6 @@
-﻿using EventBus.Events;
-using System.Threading.Tasks;
-
-namespace Catalog.API.IntegrationEvents
+﻿namespace Catalog.API.IntegrationEvents;
+public interface ICatalogIntegrationEventService
 {
-    public interface ICatalogIntegrationEventService
-    {
-        Task SaveEventAndCatalogContextChangesAsync(IntegrationEvent @event);
-        Task PublishThroughEventBusAsync(IntegrationEvent @event);
-    }
+    Task SaveEventAndCatalogContextChangesAsync(IntegrationEvent @event);
+    Task PublishThroughEventBusAsync(IntegrationEvent @event);
 }

@@ -1,7 +1,5 @@
-﻿namespace Identity.API.Models
+﻿namespace Identity.API.Models;
+public class DeviceAuthorizationInputModel : ConsentInputModel
 {
-    public class DeviceAuthorizationInputModel : ConsentInputModel
-    {
-        public string UserCode { get; set; }
-    }
+    public string UserCode { get; set; }
 }

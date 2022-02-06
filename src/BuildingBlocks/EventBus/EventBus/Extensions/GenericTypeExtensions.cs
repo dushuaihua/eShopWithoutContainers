@@ -1,29 +1,24 @@
-﻿using System;
-using System.Linq;
-
-namespace EventBus.Extensions
+﻿namespace EventBus.Extensions;
+public static class GenericTypeExtensions
 {
-    public static class GenericTypeExtensions
+    public static string GetGenericTypeName(this Type type)
     {
-        public static string GetGenericTypeName(this Type type)
-        {
-            var typeName = string.Empty;
+        var typeName = string.Empty;
 
-            if (type.IsGenericType)
-            {
-                var genericTypes = string.Join(",", type.GetGenericArguments().Select(t => t.Name).ToArray());
-
-                typeName = $"{type.Name.Remove(type.Name.IndexOf('`'))}<{genericTypes}>";
-            }
-            else
-            {
-                typeName = type.Name;
-            }
-            return typeName;
-        }
-        public static string GetGenericTypeName(this object @object)
+        if (type.IsGenericType)
         {
-            return @object.GetType().GetGenericTypeName();
+            var genericTypes = string.Join(",", type.GetGenericArguments().Select(t => t.Name).ToArray());
+
+            typeName = $"{type.Name.Remove(type.Name.IndexOf('`'))}<{genericTypes}>";
         }
+        else
+        {
+            typeName = type.Name;
+        }
+        return typeName;
+    }
+    public static string GetGenericTypeName(this object @object)
+    {
+        return @object.GetType().GetGenericTypeName();
     }
 }
