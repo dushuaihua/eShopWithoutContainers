@@ -20,24 +20,59 @@ public class Startup
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
     {
-        if (env.IsDevelopment())
+        var pathBase = Configuration["PATH_BASE"];
+        if (!string.IsNullOrEmpty(pathBase))
         {
-            app.UseDeveloperExceptionPage();
-            app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalog.API v1"));
+            loggerFactory.CreateLogger<Startup>().LogDebug("Using PATH BASE '{pathBase}'", pathBase);
+            app.UsePathBase(pathBase);
         }
 
-        app.UseHttpsRedirection();
+        app.UseSwagger().UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint($"{(!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty)}/swagger/v1/swagger.json", "Catalog.API V1");
+        });
 
         app.UseRouting();
-
-        app.UseAuthorization();
-
+        app.UseCors("CorsPolicy");
         app.UseEndpoints(endpoints =>
         {
+            endpoints.MapDefaultControllerRoute();
             endpoints.MapControllers();
+            endpoints.MapGet("", async ctx =>
+            {
+                ctx.Response.ContentType = "text/plain";
+                using var fs = new FileStream(Path.Combine(env.ContentRootPath, "Proto", "catalog.proto"), FileMode.Open, FileAccess.Read);
+                using var sr = new StreamReader(fs);
+                while (!sr.EndOfStream)
+                {
+                    var line = await sr.ReadLineAsync();
+                    if (line != "/* >>" || line != "<< */")
+                    {
+                        await ctx.Response.WriteAsync(line);
+                    }
+                }
+            });
+            endpoints.MapGrpcService<CatalogService>();
+            endpoints.MapHealthChecks("/hc", new HealthCheckOptions
+            {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
+            endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+            {
+                Predicate = r => r.Name.Contains("self")
+            });
         });
+
+        ConfigureEventBus(app);
+    }
+
+    protected virtual void ConfigureEventBus(IApplicationBuilder app)
+    {
+        var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+        eventBus.Subscribe<OrderStatusChangedToAwaitingValidationIntegrationEvent, OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
+        eventBus.Subscribe<OrderStatusChangedToPaidIntegrationEvent, OrderStatusChangedToPaidIntegrationEventHandler>();
     }
 }
