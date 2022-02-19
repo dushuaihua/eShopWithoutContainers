@@ -1,4 +1,5 @@
 ﻿namespace eShopWithoutContainers.Services.Catalog.API.Filters;
+
 public class HttpGlobalExceptionFilter : IExceptionFilter
 {
     private readonly IWebHostEnvironment _env;
@@ -12,7 +13,9 @@ public class HttpGlobalExceptionFilter : IExceptionFilter
 
     public void OnException(ExceptionContext context)
     {
-        _logger.LogError(new EventId(context.Exception.HResult), context.Exception, context.Exception.Message);
+        _logger.LogError(new EventId(context.Exception.HResult),
+            context.Exception,
+            context.Exception.Message);
 
         if (context.Exception.GetType() == typeof(CatalogDomainException))
         {
@@ -30,13 +33,26 @@ public class HttpGlobalExceptionFilter : IExceptionFilter
         }
         else
         {
-            var json = new JsonErrorResponse { };
+            var json = new JsonErrorResponse
+            {
+                Messages = new[] { "An error ocurred," }
+            };
+
+            if (_env.IsDevelopment())
+            {
+                json.DeveloperMessage = context.Exception;
+            }
+
+            context.Result = new InternalServerErrorObjectResult(json);
+            context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
         }
+        context.ExceptionHandled = true;
     }
 
     private class JsonErrorResponse
     {
         public string[] Messages { get; set; }
+
         public object DeveloperMessage { get; set; }
     }
 }

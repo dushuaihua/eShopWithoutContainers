@@ -44,6 +44,7 @@ global using eShopWithoutContainers.Services.Catalog.API.Infrastructure;
 global using eShopWithoutContainers.Services.Catalog.API.IntegrationEvents;
 global using eShopWithoutContainers.Services.Catalog.API.Model;
 global using eShopWithoutContainers.Services.Catalog.API.ViewModel;
+global using eShopWithoutContainers.Services.Catalog.API.Infrastructure.ActionResults;
 global using eShopWithoutContainers.Services.Catalog.API.Infrastructure.EntityConfigurations;
 global using eShopWithoutContainers.Services.Catalog.API.IntegrationEvents.Events;
 global using eShopWithoutContainers.Services.Catalog.API.IntegrationEvents.EventHandling;
