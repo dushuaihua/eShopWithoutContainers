@@ -1,0 +1,4 @@
+﻿dotnet tool install --global dotnet-ef
+
+dotnet ef migrations add Initial --context CatalogContext --output-dir Infrastructure/CatalogMigrations
+dotnet ef migrations add IntegrationEventInitial --context IntegrationEventLogContext --output-dir Infrastructure/IntegrationEventMigrations

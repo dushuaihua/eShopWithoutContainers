@@ -1,52 +1,38 @@
-﻿namespace EventBusServiceBus;
+﻿namespace eShopWithoutContainers.BuildingBlocks.EventBusServiceBus;
 public class DefaultServiceBusPersisterConnection : IServiceBusPersisterConnection
 {
-    private readonly ServiceBusConnectionStringBuilder _serviceBusConnectionStringBuilder;
-    private readonly string _subscriptionClientName;
-    private SubscriptionClient _subscriptionClient;
-    private ITopicClient _topicClient;
+    private readonly string _serviceBusConnectionString;
+    private ServiceBusClient _topicClient;
+    private ServiceBusAdministrationClient _subScriptionClient;
 
     bool _disposed;
 
-    public ServiceBusConnectionStringBuilder ServiceBusConnectionStringBuilder => _serviceBusConnectionStringBuilder;
-
-    public DefaultServiceBusPersisterConnection(ServiceBusConnectionStringBuilder serviceBusConnectionStringBuilder, string subscriptionClientName)
+    public DefaultServiceBusPersisterConnection(string serviceBusConnectionString)
     {
-        _serviceBusConnectionStringBuilder = serviceBusConnectionStringBuilder ?? throw new ArgumentNullException(nameof(serviceBusConnectionStringBuilder));
-        _subscriptionClientName = subscriptionClientName;
-        _subscriptionClient = new SubscriptionClient(_serviceBusConnectionStringBuilder, subscriptionClientName);
-        _topicClient = new TopicClient(_serviceBusConnectionStringBuilder, RetryPolicy.Default);
+        _serviceBusConnectionString = serviceBusConnectionString;
+        _subScriptionClient = new ServiceBusAdministrationClient(_serviceBusConnectionString);
+        _topicClient = new ServiceBusClient(_serviceBusConnectionString);
     }
 
-    public ITopicClient TopicClient
+    public ServiceBusClient TopicClient
     {
         get
         {
-            if (_topicClient.IsClosedOrClosing)
+            if (_topicClient.IsClosed)
             {
-                _topicClient = new TopicClient(_serviceBusConnectionStringBuilder, RetryPolicy.Default);
+                _topicClient = new ServiceBusClient(_serviceBusConnectionString);
             }
             return _topicClient;
         }
     }
 
-    public ISubscriptionClient SubscriptionClient
-    {
-        get
-        {
-            if (_subscriptionClient.IsClosedOrClosing)
-            {
-                _subscriptionClient = new SubscriptionClient(_serviceBusConnectionStringBuilder, _subscriptionClientName);
-            }
-            return _subscriptionClient;
-        }
-    }
+    public ServiceBusAdministrationClient AdministrationClient => _subScriptionClient;
 
-    public ITopicClient CreateModel()
+    public ServiceBusClient CreateModel()
     {
-        if (_topicClient.IsClosedOrClosing)
+        if (_topicClient.IsClosed)
         {
-            _topicClient = new TopicClient(_serviceBusConnectionStringBuilder, RetryPolicy.Default);
+            _topicClient = new ServiceBusClient(_serviceBusConnectionString);
         }
         return _topicClient;
     }
@@ -58,5 +44,6 @@ public class DefaultServiceBusPersisterConnection : IServiceBusPersisterConnecti
             return;
         }
         _disposed = true;
+        _topicClient.DisposeAsync().GetAwaiter().GetResult();
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace IntegrationEventLogEF;
+﻿namespace eShopWithoutContainers.BuildingBlocks.IntegrationEventLogEF;
 public class IntegrationEventLogContext : DbContext
 {
     public IntegrationEventLogContext(DbContextOptions<IntegrationEventLogContext> options)

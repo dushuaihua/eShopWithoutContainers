@@ -1,4 +1,4 @@
-﻿namespace EventBus.Extensions;
+﻿namespace eShopWithoutContainers.BuildingBlocks.EventBus.Extensions;
 public static class GenericTypeExtensions
 {
     public static string GetGenericTypeName(this Type type)

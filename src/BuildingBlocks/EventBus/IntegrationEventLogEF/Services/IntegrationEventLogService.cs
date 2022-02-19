@@ -1,4 +1,4 @@
-﻿namespace IntegrationEventLogEF.Services;
+﻿namespace eShopWithoutContainers.BuildingBlocks.IntegrationEventLogEF.Services;
 public class IntegrationEventLogService : IIntegrationEventLogService
 {
     private readonly IntegrationEventLogContext _integrationEventLogContext;

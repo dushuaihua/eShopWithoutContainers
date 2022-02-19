@@ -1,4 +1,4 @@
-﻿namespace EventBus.Events;
+﻿namespace eShopWithoutContainers.BuildingBlocks.EventBus.Events;
 public record IntegrationEvent
 {
     public IntegrationEvent()

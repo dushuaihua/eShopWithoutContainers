@@ -1,4 +1,4 @@
-﻿namespace Catalog.API.IntegrationEvents.Events;
+﻿namespace eShopWithoutContainers.Services.Catalog.API.IntegrationEvents.Events;
 public record ProductPriceChangedIntegrationEvent : IntegrationEvent
 {
     public int ProductId { get; private init; }

@@ -1,4 +1,4 @@
-﻿namespace Catalog.API.IntegrationEvents.EventHandling;
+﻿namespace eShopWithoutContainers.Services.Catalog.API.IntegrationEvents.EventHandling;
 public class OrderStatusChangedToAwaitingValidationIntegrationEventHandler : IIntegrationEventHandler<OrderStatusChangedToAwaitingValidationIntegrationEvent>
 {
     private readonly CatalogContext _catalogContext;

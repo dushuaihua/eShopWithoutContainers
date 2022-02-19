@@ -1,4 +1,4 @@
-﻿namespace Catalog.API.Infrastructure;
+﻿namespace eShopWithoutContainers.Services.Catalog.API.Infrastructure;
 public class CatalogContext : DbContext
 {
     public CatalogContext(DbContextOptions<CatalogContext> options) : base(options)
@@ -15,16 +15,5 @@ public class CatalogContext : DbContext
         modelBuilder.ApplyConfiguration(new CatalogBrandEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new CatalogTypeEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new CatalogItemEntityTypeConfiguration());
-    }
-
-    public class CatalogContextDesignFactory : IDesignTimeDbContextFactory<CatalogContext>
-    {
-        public CatalogContext CreateDbContext(string[] args)
-        {
-            var optionsBuilder = new DbContextOptionsBuilder<CatalogContext>()
-                .UseSqlServer("Server=.;Initial Catalog=Microsoft.eShopWithoutContainers.Services.CatalogDb;Integrated Security=true");
-
-            return new CatalogContext(optionsBuilder.Options);
-        }
     }
 }

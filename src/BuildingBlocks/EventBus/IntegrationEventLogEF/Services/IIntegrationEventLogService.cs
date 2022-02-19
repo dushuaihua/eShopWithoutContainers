@@ -1,4 +1,4 @@
-﻿namespace IntegrationEventLogEF.Services;
+﻿namespace eShopWithoutContainers.BuildingBlocks.IntegrationEventLogEF.Services;
 public interface IIntegrationEventLogService
 {
     Task<IEnumerable<IntegrationEventLogEntry>> RetrieveEventLogsPendingToPublishAsync(Guid transactionId);

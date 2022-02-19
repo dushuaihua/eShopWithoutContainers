@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
-namespace EventBus.Tests
+namespace eShopWithoutContainers.BuildingBlocks.EventBus.Tests
 {
     [TestClass]
     public class InMemory_SubscriptionManager_Tests

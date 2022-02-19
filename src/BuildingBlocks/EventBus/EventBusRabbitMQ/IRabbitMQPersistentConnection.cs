@@ -1,4 +1,4 @@
-﻿namespace EventBusRabbitMQ;
+﻿namespace eShopWithoutContainers.BuildingBlocks.EventBusRabbitMQ;
 public interface IRabbitMQPersistentConnection : IDisposable
 {
     bool IsConnected { get; }

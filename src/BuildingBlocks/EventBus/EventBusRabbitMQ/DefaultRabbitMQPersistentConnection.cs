@@ -1,4 +1,4 @@
-﻿namespace EventBusRabbitMQ;
+﻿namespace eShopWithoutContainers.BuildingBlocks.EventBusRabbitMQ;
 public class DefaultRabbitMQPersistentConnection : IRabbitMQPersistentConnection
 {
     private readonly IConnectionFactory _connectionFactory;
@@ -79,7 +79,7 @@ public class DefaultRabbitMQPersistentConnection : IRabbitMQPersistentConnection
         }
     }
 
-    private void OnConnectionBlocked(object sender, RabbitMQ.Client.Events.ConnectionBlockedEventArgs e)
+    private void OnConnectionBlocked(object sender, ConnectionBlockedEventArgs e)
     {
         if (_disposed)
         {
@@ -89,7 +89,7 @@ public class DefaultRabbitMQPersistentConnection : IRabbitMQPersistentConnection
         TryConnect();
     }
 
-    private void OnCallbackException(object sender, RabbitMQ.Client.Events.CallbackExceptionEventArgs e)
+    private void OnCallbackException(object sender, CallbackExceptionEventArgs e)
     {
         if (_disposed)
         {

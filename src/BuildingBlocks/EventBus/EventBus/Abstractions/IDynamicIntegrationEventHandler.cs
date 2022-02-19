@@ -1,4 +1,4 @@
-﻿namespace EventBus.Abstractions;
+﻿namespace eShopWithoutContainers.BuildingBlocks.EventBus.Abstractions;
 public interface IDynamicIntegrationEventHandler
 {
     Task Handle(dynamic eventData);

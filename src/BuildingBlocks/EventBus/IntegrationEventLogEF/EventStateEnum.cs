@@ -1,4 +1,4 @@
-﻿namespace IntegrationEventLogEF;
+﻿namespace eShopWithoutContainers.BuildingBlocks.IntegrationEventLogEF;
 public enum EventStateEnum
 {
     NotPublished = 0,

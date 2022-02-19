@@ -1,4 +1,4 @@
-﻿namespace Catalog.API.Infrastructure.Exceptions;
+﻿namespace eShopWithoutContainers.Services.Catalog.API.Infrastructure.Exceptions;
 public class CatalogDomainException : Exception
 {
     public CatalogDomainException()

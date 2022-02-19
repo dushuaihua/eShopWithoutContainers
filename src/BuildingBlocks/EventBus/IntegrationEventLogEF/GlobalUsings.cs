@@ -1,4 +1,4 @@
-﻿global using EventBus.Events;
+﻿global using eShopWithoutContainers.BuildingBlocks.EventBus.Events;
 global using System;
 global using System.ComponentModel.DataAnnotations.Schema;
 global using System.Linq;

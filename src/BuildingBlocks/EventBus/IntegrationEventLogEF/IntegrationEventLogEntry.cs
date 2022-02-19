@@ -1,4 +1,4 @@
-﻿namespace IntegrationEventLogEF;
+﻿namespace eShopWithoutContainers.BuildingBlocks.IntegrationEventLogEF;
 public class IntegrationEventLogEntry
 {
     private IntegrationEventLogEntry() { }

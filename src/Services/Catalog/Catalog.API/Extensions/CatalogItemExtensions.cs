@@ -1,4 +1,4 @@
-﻿namespace Catalog.API.Model;
+﻿namespace eShopWithoutContainers.Services.Catalog.API.Model;
 public static class CatalogItemExtensions
 {
     public static void FillProductUrl(this CatalogItem item, string picBaseUrl, bool azureStorageEnabled)

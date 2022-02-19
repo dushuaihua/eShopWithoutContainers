@@ -1,4 +1,4 @@
-﻿namespace Catalog.API.Infrastructure.EntityConfigurations;
+﻿namespace eShopWithoutContainers.Services.Catalog.API.Infrastructure.EntityConfigurations;
 public class CatalogBrandEntityTypeConfiguration : IEntityTypeConfiguration<CatalogBrand>
 {
     public void Configure(EntityTypeBuilder<CatalogBrand> builder)

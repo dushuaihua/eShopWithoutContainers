@@ -1,4 +1,4 @@
-﻿namespace Catalog.API.Model;
+﻿namespace eShopWithoutContainers.Services.Catalog.API.Model;
 public class CatalogItem
 {
     public int Id { get; set; }

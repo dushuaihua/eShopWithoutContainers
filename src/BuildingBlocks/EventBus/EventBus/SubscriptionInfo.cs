@@ -1,4 +1,4 @@
-﻿namespace EventBus;
+﻿namespace eShopWithoutContainers.BuildingBlocks.EventBus;
 public partial class InMemoryEventBusSubscriptionsManager
 {
     public class SubscriptionInfo

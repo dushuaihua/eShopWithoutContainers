@@ -1,4 +1,4 @@
-﻿namespace Catalog.API.IntegrationEvents.EventHandling;
+﻿namespace eShopWithoutContainers.Services.Catalog.API.IntegrationEvents.EventHandling;
 public class OrderStatusChangedToPaidIntegrationEventHandler : IIntegrationEventHandler<OrderStatusChangedToPaidIntegrationEvent>
 {
     private readonly CatalogContext _catalogContext;

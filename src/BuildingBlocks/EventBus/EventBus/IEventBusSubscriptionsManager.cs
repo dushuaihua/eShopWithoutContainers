@@ -1,4 +1,4 @@
-﻿namespace EventBus;
+﻿namespace eShopWithoutContainers.BuildingBlocks.EventBus;
 public interface IEventBusSubscriptionsManager
 {
     bool IsEmpty { get; }

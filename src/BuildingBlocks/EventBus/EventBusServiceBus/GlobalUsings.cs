@@ -1,10 +1,11 @@
-﻿global using Microsoft.Azure.ServiceBus;
-global using System;
+﻿global using System;
 global using Autofac;
-global using EventBus;
-global using EventBus.Abstractions;
-global using EventBus.Events;
+global using eShopWithoutContainers.BuildingBlocks.EventBus;
+global using eShopWithoutContainers.BuildingBlocks.EventBus.Abstractions;
+global using eShopWithoutContainers.BuildingBlocks.EventBus.Events;
 global using Microsoft.Extensions.Logging;
 global using System.Text;
 global using System.Text.Json;
 global using System.Threading.Tasks;
+global using Azure.Messaging.ServiceBus;
+global using Azure.Messaging.ServiceBus.Administration;

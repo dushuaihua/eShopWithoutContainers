@@ -1,4 +1,4 @@
-﻿namespace Catalog.API.IntegrationEvents.Events;
+﻿namespace eShopWithoutContainers.Services.Catalog.API.IntegrationEvents.Events;
 public record OrderStatusChangedToAwaitingValidationIntegrationEvent : IntegrationEvent
 {
     public int OrderId { get; }

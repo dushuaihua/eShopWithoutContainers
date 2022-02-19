@@ -1,4 +1,4 @@
-﻿namespace Catalog.API.Controllers;
+﻿namespace eShopWithoutContainers.Services.Catalog.API.Controllers;
 public class HomeController : Controller
 {
     public IActionResult Index()

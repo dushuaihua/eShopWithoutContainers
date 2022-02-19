@@ -1,4 +1,4 @@
-﻿namespace Catalog.API;
+﻿namespace eShopWithoutContainers.Services.Catalog.API;
 public class CatalogSettings
 {
     public string PicBaseUrl { get; set; }

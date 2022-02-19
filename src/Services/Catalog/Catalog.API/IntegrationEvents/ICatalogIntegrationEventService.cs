@@ -1,4 +1,4 @@
-﻿namespace Catalog.API.IntegrationEvents;
+﻿namespace eShopWithoutContainers.Services.Catalog.API.IntegrationEvents;
 public interface ICatalogIntegrationEventService
 {
     Task SaveEventAndCatalogContextChangesAsync(IntegrationEvent @event);

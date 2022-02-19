@@ -1,7 +1,7 @@
-﻿using EventBus.Abstractions;
+﻿using eShopWithoutContainers.BuildingBlocks.EventBus.Abstractions;
 using System.Threading.Tasks;
 
-namespace EventBus.Tests
+namespace eShopWithoutContainers.BuildingBlocks.EventBus.Tests
 {
     public class TestIntegrationOtherEventHandler : IIntegrationEventHandler<TestIntegrationEvent>
     {

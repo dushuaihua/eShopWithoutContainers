@@ -1,4 +1,4 @@
-﻿namespace Catalog.API.ViewModel;
+﻿namespace eShopWithoutContainers.Services.Catalog.API.ViewModel;
 public class PaginatedItemsViewModel<TEntity> where TEntity : class
 {
     public int PageIndex { get; private set; }

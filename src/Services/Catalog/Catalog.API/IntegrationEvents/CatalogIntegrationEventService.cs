@@ -1,4 +1,4 @@
-﻿namespace Catalog.API.IntegrationEvents;
+﻿namespace eShopWithoutContainers.Services.Catalog.API.IntegrationEvents;
 public class CatalogIntegrationEventService : ICatalogIntegrationEventService, IDisposable
 {
     private readonly Func<DbConnection, IIntegrationEventLogService> _integrationEventLogServiceFactory;

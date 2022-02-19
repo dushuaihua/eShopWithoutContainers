@@ -1,4 +1,4 @@
-﻿namespace IntegrationEventLogEF.Utilities;
+﻿namespace eShopWithoutContainers.BuildingBlocks.IntegrationEventLogEF.Utilities;
 public class ResilientTransaction
 {
     private DbContext _context;

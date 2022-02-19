@@ -1,6 +1,6 @@
-﻿using EventBus.Events;
+﻿using eShopWithoutContainers.BuildingBlocks.EventBus.Events;
 
-namespace EventBus.Tests
+namespace eShopWithoutContainers.BuildingBlocks.EventBus.Tests
 {
     public record TestIntegrationEvent : IntegrationEvent
     {

@@ -1,4 +1,4 @@
-﻿namespace Catalog.API.Controllers;
+﻿namespace eShopWithoutContainers.Services.Catalog.API.Controllers;
 [Route("api/v1/[controller]")]
 [ApiController]
 public class CatalogController : ControllerBase
