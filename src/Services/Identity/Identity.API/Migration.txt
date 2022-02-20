@@ -1,0 +1,5 @@
+﻿dotnet tool install --global dotnet-ef
+
+dotnet ef migrations add Initial --context ApplicationDbContext --output-dir Migrations/Application
+dotnet ef migrations add Initial --context ConfigurationDbContext --output-dir Migrations/Configuration
+dotnet ef migrations add Initial --context PersistedGrantDbContext --output-dir Migrations/PersistedGrant
