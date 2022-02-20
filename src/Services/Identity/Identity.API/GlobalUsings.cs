@@ -1,7 +1,4 @@
-﻿global using Identity.API.Data;
-global using Identity.API.Models;
-global using Identity.API.Services;
-global using IdentityServer4.EntityFramework.DbContexts;
+﻿global using IdentityServer4.EntityFramework.DbContexts;
 global using IdentityServer4.Services;
 global using Microsoft.AspNetCore.Builder;
 global using Microsoft.AspNetCore.Hosting;
