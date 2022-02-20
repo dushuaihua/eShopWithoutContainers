@@ -1,4 +1,4 @@
-﻿namespace eShopWithoutContainers.Services.Catalog.API.Filters;
+﻿namespace eShopWithoutContainers.Services.Catalog.API.Infrastructure.Filters;
 
 public class HttpGlobalExceptionFilter : IExceptionFilter
 {
