@@ -1,6 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-
-namespace Microsoft.AspNetCore.Hosting
+﻿namespace Microsoft.AspNetCore.Hosting
 {
     public static class IWebHostExtensions
     {

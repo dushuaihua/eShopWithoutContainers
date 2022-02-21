@@ -52,6 +52,54 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="Models\ManageViewModels\" />
+    <Folder Include="Views\Account\" />
+    <Folder Include="Views\Consent\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\fonts\Montserrat-Bold.svg" />
+    <None Include="wwwroot\fonts\Montserrat-Bold.woff2" />
+    <None Include="wwwroot\fonts\Montserrat-Regular.svg" />
+    <None Include="wwwroot\fonts\Montserrat-Regular.woff2" />
+    <None Include="wwwroot\fonts\Oswald-Bold.svg" />
+    <None Include="wwwroot\fonts\Oswald-Bold.woff2" />
+    <None Include="wwwroot\fonts\Oswald-ExtraLight.svg" />
+    <None Include="wwwroot\fonts\Oswald-ExtraLight.woff2" />
+    <None Include="wwwroot\fonts\Oswald-Light.svg" />
+    <None Include="wwwroot\fonts\Oswald-Light.woff2" />
+    <None Include="wwwroot\fonts\Oswald-Medium.svg" />
+    <None Include="wwwroot\fonts\Oswald-Medium.woff2" />
+    <None Include="wwwroot\fonts\Oswald-Regular.svg" />
+    <None Include="wwwroot\fonts\Oswald-Regular.woff2" />
+    <None Include="wwwroot\fonts\Oswald-SemiBold.svg" />
+    <None Include="wwwroot\fonts\Oswald-SemiBold.woff2" />
+    <None Include="wwwroot\images\arrow-right.svg" />
+    <None Include="wwwroot\images\banner1.svg" />
+    <None Include="wwwroot\images\banner2.svg" />
+    <None Include="wwwroot\images\banner3.svg" />
+    <None Include="wwwroot\images\banner4.svg" />
+    <None Include="wwwroot\images\logo.svg" />
+    <None Include="wwwroot\images\logo_color.svg" />
+    <None Include="wwwroot\images\main_banner_text.svg" />
+    <None Include="wwwroot\images\refresh.svg" />
+    <None Include="wwwroot\js\site.js" />
+    <None Include="wwwroot\js\site.min.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js" />
+    <None Include="wwwroot\lib\jquery-validate\jquery.validate.js" />
+    <None Include="wwwroot\lib\jquery-validate\jquery.validate.min.js" />
+    <None Include="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js" />
+    <None Include="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
+    <None Include="wwwroot\lib\jquery\core.js" />
+    <None Include="wwwroot\lib\jquery\jquery.js" />
+    <None Include="wwwroot\lib\jquery\jquery.min.js" />
+    <None Include="wwwroot\lib\jquery\jquery.min.map" />
+    <None Include="wwwroot\lib\jquery\jquery.slim.js" />
+    <None Include="wwwroot\lib\jquery\jquery.slim.min.js" />
+    <None Include="wwwroot\lib\jquery\jquery.slim.min.map" />
   </ItemGroup>
 
 </Project>
