@@ -24,33 +24,32 @@ public record ConsentViewModel : ConsentInputModel
         IdentityScopes = resources.IdentityResources.Select(x => new ScopeViewModel(x, ScopesConsented.Contains(x.Name) || model == null)).ToArray();
         ResourceScopes = resources.ApiScopes.Select(x => new ScopeViewModel(x, ScopesConsented.Contains(x.Name) || model == null));
     }
+}
+public record ScopeViewModel
+{
+    public string Name { get; init; }
+    public string DisplayName { get; init; }
+    public string Description { get; init; }
+    public bool Emphasize { get; init; }
+    public bool Required { get; init; }
+    public bool Checked { get; init; }
 
-    public record ScopeViewModel
+    public ScopeViewModel(ApiScope scope, bool check)
     {
-        public string Name { get; init; }
-        public string DisplayName { get; init; }
-        public string Description { get; init; }
-        public bool Emphasize { get; init; }
-        public bool Required { get; init; }
-        public bool Checked { get; init; }
+        Name = scope.Name;
+        DisplayName = scope.DisplayName;
+        Description = scope.Description;
+        Emphasize = scope.Emphasize;
+        Checked = check || scope.Required;
+    }
 
-        public ScopeViewModel(ApiScope scope, bool check)
-        {
-            Name = scope.Name;
-            DisplayName = scope.DisplayName;
-            Description = scope.Description;
-            Emphasize = scope.Emphasize;
-            Checked = check || scope.Required;
-        }
-
-        public ScopeViewModel(IdentityResource identity, bool check)
-        {
-            Name = identity.Name;
-            DisplayName = identity.DisplayName;
-            Description = identity.Description;
-            Emphasize = identity.Emphasize;
-            Required = identity.Required;
-            Checked = check || identity.Required;
-        }
+    public ScopeViewModel(IdentityResource identity, bool check)
+    {
+        Name = identity.Name;
+        DisplayName = identity.DisplayName;
+        Description = identity.Description;
+        Emphasize = identity.Emphasize;
+        Required = identity.Required;
+        Checked = check || identity.Required;
     }
 }
