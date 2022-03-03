@@ -1,6 +1,6 @@
 ﻿namespace eShopWithoutContainers.Services.Basket.API.Infrastructure.Filters;
 
-public class ValiateModelStateFilter : ActionFilterAttribute
+public class ValidateModelStateFilter : ActionFilterAttribute
 {
     public override void OnActionExecuting(ActionExecutingContext context)
     {

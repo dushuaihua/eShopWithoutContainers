@@ -6,9 +6,9 @@ public class Startup
         Configuration = configuration;
     }
 
-    public IConfiguration Configuration { get; set; }
+    public IConfiguration Configuration { get; }
 
-    public virtual IServiceProvider ConfigureService(IServiceCollection services)
+    public virtual IServiceProvider ConfigureServices(IServiceCollection services)
     {
         services.AddGrpc(options =>
         {
@@ -18,10 +18,10 @@ public class Startup
         RegisterAppInsights(services);
 
         services.AddControllers(options =>
-            {
-                options.Filters.Add(typeof(HttpGlobalExceptionFilter));
-                options.Filters.Add(typeof(ValiateModelStateFilter));
-            })
+        {
+            options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+            options.Filters.Add(typeof(ValidateModelStateFilter));
+        })
             .AddApplicationPart(typeof(BasketController).Assembly)
             .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
 
@@ -45,11 +45,12 @@ public class Startup
                         TokenUrl = new Uri($"{Configuration.GetValue<string>("IdentityUrlExternal")}/conenct/token"),
                         Scopes = new Dictionary<string, string>()
                         {
-                                {"basket","Basket API" }
+                            {"basket","Basket API" }
                         }
                     }
                 }
             });
+
             options.OperationFilter<AuthorizeCheckOperationFilter>();
         });
 
@@ -81,6 +82,7 @@ public class Startup
             services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
             {
                 var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+
                 var factory = new ConnectionFactory
                 {
                     HostName = Configuration["EventBusConnection"],
@@ -110,10 +112,12 @@ public class Startup
 
         services.AddCors(options =>
         {
-            options.AddPolicy("CorsPolicy", builder => builder.SetIsOriginAllowed((host) => true)
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials());
+            options.AddPolicy("CorsPolicy",
+                builder => builder.
+                SetIsOriginAllowed((host) => true)
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
         });
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddTransient<IBasketRepository, RedisBasketRepository>();
@@ -127,6 +131,91 @@ public class Startup
         return new AutofacServiceProvider(container.Build());
     }
 
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+    {
+        var pathBase = Configuration["PATH_BASE"];
+        if (!string.IsNullOrEmpty(pathBase))
+        {
+            app.UsePathBase(pathBase);
+        }
+
+        app.UseSwagger()
+            .UseSwaggerUI(setup =>
+            {
+                setup.SwaggerEndpoint($"{(!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty)}/swagger/v1/swagger.json", "Basket.API V1");
+                setup.OAuthClientId("basketswaggerui");
+                setup.OAuthAppName("Basket Swagger UI");
+            });
+
+        app.UseRouting();
+        app.UseCors("CorsPolicy");
+        ConfigureAuth(app);
+
+        app.UseStaticFiles();
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapGrpcService<BasketService>();
+            endpoints.MapDefaultControllerRoute();
+            endpoints.MapControllers();
+            endpoints.MapGet("/_proto/", async context =>
+            {
+                context.Response.ContentType = "text/plain";
+                using var fs = new FileStream(Path.Combine(env.ContentRootPath, "Proto", "basket.proto"), FileMode.Open, FileAccess.Read);
+                using var sr = new StreamReader(fs);
+                while (!sr.EndOfStream)
+                {
+                    var line = await sr.ReadLineAsync();
+                    if (line != "/* >>" || line != "<< */")
+                    {
+                        await context.Response.WriteAsync(line);
+                    }
+                }
+            });
+            endpoints.MapHealthChecks("/hc", new HealthCheckOptions
+            {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
+            endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+            {
+                Predicate = r => r.Name.Contains("self")
+            });
+        });
+
+        ConfigureEventBus(app);
+    }
+
+    private void RegisterAppInsights(IServiceCollection services)
+    {
+        services.AddApplicationInsightsTelemetry(Configuration);
+        services.AddApplicationInsightsKubernetesEnricher();
+    }
+
+    private void ConfigureAuthService(IServiceCollection services)
+    {
+        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
+
+        var identityUrl = Configuration.GetValue<string>("IdentityUrl");
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+        }).AddJwtBearer(options =>
+        {
+            options.Authority = identityUrl;
+            options.RequireHttpsMetadata = false;
+            options.Audience = "basket";
+        });
+    }
+
+    protected virtual void ConfigureAuth(IApplicationBuilder app)
+    {
+        app.UseAuthentication();
+        app.UseAuthorization();
+    }
     private void RegisterEventBus(IServiceCollection services)
     {
         if (Configuration.GetValue<bool>("AzureServiceBusEnabled"))
@@ -164,33 +253,10 @@ public class Startup
         }
 
         services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
+
         services.AddTransient<ProductPriceChangedIntegrationEventHandler>();
         services.AddTransient<OrderStartedIntegrationEventHandler>();
     }
-
-    private void ConfigureAuthService(IServiceCollection services)
-    {
-        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
-
-        var identityUrl = Configuration.GetValue<string>("IdentityUrl");
-
-        services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        }).AddJwtBearer(options =>
-        {
-            options.Authority = identityUrl;
-            options.RequireHttpsMetadata = false;
-            options.Audience = "basket";
-        });
-    }
-    private void RegisterAppInsights(IServiceCollection services)
-    {
-        services.AddApplicationInsightsTelemetry(Configuration);
-        services.AddApplicationInsightsKubernetesEnricher();
-    }
-
     private void ConfigureEventBus(IApplicationBuilder app)
     {
         var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
