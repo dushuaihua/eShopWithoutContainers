@@ -113,8 +113,8 @@ public class Startup
         services.AddCors(options =>
         {
             options.AddPolicy("CorsPolicy",
-                builder => builder.
-                SetIsOriginAllowed((host) => true)
+                builder => builder
+                .SetIsOriginAllowed((host) => true)
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials());
@@ -282,7 +282,7 @@ public static class CustomExtensionMethods
         if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
         {
             hcBuilder.AddAzureServiceBusTopic(
-                configuration["EventBusConenction"],
+                configuration["EventBusConnection"],
                 topicName: "eshop_event_bus",
                 name: "basket-servicebus-check",
                 tags: new string[] { "servicebus" });

@@ -39,3 +39,4 @@ global using Autofac.Extensions.DependencyInjection;
 global using Grpc.Core;
 global using GrpcBasket;
 global using HealthChecks.UI.Client;
+global using System.Text.Json;

@@ -1,23 +1,62 @@
 ﻿namespace eShopWithoutContainers.Services.Basket.API.Infrastructure.Repositories;
 public class RedisBasketRepository : IBasketRepository
 {
-    public Task<bool> DeleteBasketAsync(string id)
+    private readonly ILogger<RedisBasketRepository> _logger;
+    private readonly ConnectionMultiplexer _connectionMultiplexer;
+    private readonly IDatabase _database;
+
+    public RedisBasketRepository(ILoggerFactory loggerFactory, ConnectionMultiplexer connectionMultiplexer)
     {
-        throw new NotImplementedException();
+        _logger = loggerFactory.CreateLogger<RedisBasketRepository>();
+        _connectionMultiplexer = connectionMultiplexer;
+        _database = _connectionMultiplexer.GetDatabase();
+    }
+    public async Task<bool> DeleteBasketAsync(string id)
+    {
+        return await _database.KeyDeleteAsync(id);
     }
 
-    public Task<CustomerBasket> GetBasketAsync(string customerId)
+    public async Task<CustomerBasket> GetBasketAsync(string customerId)
     {
-        throw new NotImplementedException();
+        var data = await _database.StringGetAsync(customerId);
+
+        if (data.IsNullOrEmpty)
+        {
+            return null;
+        }
+
+        return JsonSerializer.Deserialize<CustomerBasket>(data, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        });
     }
 
     public IEnumerable<string> GetUsers()
     {
-        throw new NotImplementedException();
+        var server = GetServer();
+        var data = server.Keys();
+
+        return data?.Select(k => k.ToString());
     }
 
-    public Task<CustomerBasket> UpdateBasketAsync(CustomerBasket basket)
+    public async Task<CustomerBasket> UpdateBasketAsync(CustomerBasket basket)
     {
-        throw new NotImplementedException();
+        var created = await _database.StringSetAsync(basket.BuyerId, JsonSerializer.Serialize(basket));
+
+        if (!created)
+        {
+            _logger.LogInformation("Problem occur persisting the item.");
+            return null;
+        }
+
+        _logger.LogInformation("Basket item persisted successfully.");
+
+        return await GetBasketAsync(basket.BuyerId);
+    }
+
+    private IServer GetServer()
+    {
+        var endpoint = _connectionMultiplexer.GetEndPoints();
+        return _connectionMultiplexer.GetServer(endpoint.First());
     }
 }
