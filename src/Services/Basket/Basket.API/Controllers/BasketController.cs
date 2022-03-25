@@ -28,7 +28,6 @@ public class BasketController : ControllerBase
     public async Task<ActionResult<CustomerBasket>> GetBasketByIdAsync(string id)
     {
         var basket = await _repository.GetBasketAsync(id);
-
         return Ok(basket ?? new CustomerBasket(id));
     }
 

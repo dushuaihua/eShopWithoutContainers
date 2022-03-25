@@ -16,7 +16,7 @@ public class RedisBasketRepositoryTests : BasketScenarioBase
 
             var basket = await redisBasketRepository.UpdateBasketAsync(new CustomerBasket("customerId")
             {
-                BuyerId = "buyderId",
+                BuyerId = "buyerId",
                 Items = BuildBasketItems()
             });
 
@@ -36,7 +36,7 @@ public class RedisBasketRepositoryTests : BasketScenarioBase
 
             var basket = await redisBasketRepository.UpdateBasketAsync(new CustomerBasket("customerId")
             {
-                BuyerId = "buyderId",
+                BuyerId = "buyerId",
                 Items = BuildBasketItems()
             });
 

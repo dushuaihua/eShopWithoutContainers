@@ -1,0 +1,15 @@
+﻿global using System.Collections.Generic;
+global using System.Threading.Tasks;
+global using eShopWithoutContainers.Services.Basket.API.Model;
+global using Moq;
+global using IBasketIdentityService = eShopWithoutContainers.Services.Basket.API.Services.IIdentityService;
+global using eShopWithoutContainers.BuildingBlocks.EventBus.Abstractions;
+global using eShopWithoutContainers.Services.Basket.API.Controllers;
+global using Microsoft.Extensions.Logging;
+global using eShopWithoutContainers.Services.Basket.API.IntegrationEvents.Events;
+global using Microsoft.AspNetCore.Mvc;
+global using System.Net;
+global using Xunit;
+global using Microsoft.AspNetCore.Http;
+global using System;
+global using System.Security.Claims;

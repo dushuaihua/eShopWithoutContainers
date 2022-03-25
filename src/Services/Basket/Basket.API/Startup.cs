@@ -73,7 +73,6 @@ public class Startup
             services.AddSingleton<IServiceBusPersisterConnection>(sp =>
             {
                 var serviceBusConnectionString = Configuration["EventBusConnection"];
-
                 return new DefaultServiceBusPersisterConnection(serviceBusConnectionString);
             });
         }
