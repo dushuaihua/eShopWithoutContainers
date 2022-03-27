@@ -1,0 +1,13 @@
+global using Autofac;
+global using Autofac.Extensions.DependencyInjection;
+global using eShopWithoutContainers.BuildingBlocks.EventBus;
+global using eShopWithoutContainers.BuildingBlocks.EventBus.Abstractions;
+global using eShopWithoutContainers.BuildingBlocks.EventBusRabbitMQ;
+global using eShopWithoutContainers.BuildingBlocks.EventBusServiceBus;
+global using eShopWithoutContainers.Services.Payment.API.IntegrationEvents.EventHandling;
+global using eShopWithoutContainers.Services.Payment.API.IntegrationEvents.Events;
+global using HealthChecks.UI.Client;
+global using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+global using Microsoft.Extensions.Diagnostics.HealthChecks;
+global using RabbitMQ.Client;
+global using eShopWithoutContainers.BuildingBlocks.EventBus.Events;
