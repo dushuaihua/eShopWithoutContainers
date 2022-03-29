@@ -2,6 +2,6 @@
 
 public class PaymentSettings
 {
-    public bool PaymentSuccessed { get; set; }
+    public bool PaymentSucceeded { get; set; }
     public string EventBusConnection { get; set; }
 }

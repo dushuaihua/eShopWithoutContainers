@@ -26,9 +26,9 @@ public class OrderStatusChangedToStockConfirmedIntegrationEventHandler : IIntegr
 
             IntegrationEvent orderPaymentIntegrationEvent;
 
-            if (_settings.PaymentSuccessed)
+            if (_settings.PaymentSucceeded)
             {
-                orderPaymentIntegrationEvent = new OrderPaymentSuccessedIntegrationEvent(@event.OrderId);
+                orderPaymentIntegrationEvent = new OrderPaymentSucceededIntegrationEvent(@event.OrderId);
             }
             else
             {

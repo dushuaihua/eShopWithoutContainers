@@ -13,11 +13,8 @@ public class EventBusRabbitMQ : IEventBus, IDisposable
     private IModel _consumerChannel;
     private string _queueName;
 
-    public EventBusRabbitMQ(
-        IRabbitMQPersistentConnection persistentConnection,
-        ILogger<EventBusRabbitMQ> logger, ILifetimeScope autofac,
-        IEventBusSubscriptionsManager subscriptionsManager, string queueName = null,
-        int retryCount = 5)
+    public EventBusRabbitMQ(IRabbitMQPersistentConnection persistentConnection, ILogger<EventBusRabbitMQ> logger,
+        ILifetimeScope autofac, IEventBusSubscriptionsManager subscriptionsManager, string queueName = null, int retryCount = 5)
     {
         _persistentConnection = persistentConnection ?? throw new AccessViolationException(nameof(persistentConnection));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -57,7 +54,7 @@ public class EventBusRabbitMQ : IEventBus, IDisposable
                 var properties = channel.CreateBasicProperties();
                 properties.DeliveryMode = 2;//persistent
 
-                    _logger.LogTrace("Publishing event to RabbitMQ: {EventId}", @event.Id);
+                _logger.LogTrace("Publishing event to RabbitMQ: {EventId}", @event.Id);
 
                 channel.BasicPublish(
                     exchange: BROKER_NAME,
@@ -152,8 +149,11 @@ public class EventBusRabbitMQ : IEventBus, IDisposable
 
         channel.ExchangeDeclare(exchange: BROKER_NAME, type: "direct");
 
-        channel.QueueDeclare(queue: _queueName, durable: true,
-            exclusive: false, autoDelete: false, arguments: null);
+        channel.QueueDeclare(queue: _queueName,
+                                durable: true,
+                                exclusive: false,
+                                autoDelete: false,
+                                arguments: null);
 
         channel.CallbackException += (sender, ea) =>
         {

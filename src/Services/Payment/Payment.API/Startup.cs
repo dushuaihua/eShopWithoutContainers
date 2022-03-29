@@ -4,17 +4,17 @@ public class Startup
 {
     public Startup(IConfiguration configuration)
     {
-
+        Configuration = configuration;
     }
 
-    public IConfiguration Configuration { get; set; }
+    public IConfiguration Configuration { get; }
 
-    public IServiceProvider ConfigurationServices(IServiceCollection services)
+    public IServiceProvider ConfigureServices(IServiceCollection services)
     {
         services.AddCustomHealthCheck(Configuration);
         services.Configure<PaymentSettings>(Configuration);
 
-        RegisterAppInsight(services);
+        RegisterAppInsights(services);
 
         if (Configuration.GetValue<bool>("AzureServiceBusEnabled"))
         {
@@ -30,7 +30,7 @@ public class Startup
         {
             services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
             {
-                var logger = sp.GetService<ILogger<DefaultRabbitMQPersistentConnection>>();
+                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
                 var factory = new ConnectionFactory()
                 {
                     HostName = Configuration["EventBusConnection"],
@@ -90,7 +90,7 @@ public class Startup
         });
     }
 
-    private void RegisterAppInsight(IServiceCollection services)
+    private void RegisterAppInsights(IServiceCollection services)
     {
         services.AddApplicationInsightsTelemetry(Configuration);
         services.AddApplicationInsightsKubernetesEnricher();
@@ -150,7 +150,7 @@ public static class IServiceCollectionExtensions
 
         hcBuilder.AddCheck("self", () => HealthCheckResult.Healthy());
 
-        if (configuration.GetValue<bool>("AzureServiceBusEnbaled"))
+        if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
         {
             hcBuilder.AddAzureServiceBusTopic(
                 configuration["EventBusConnection"],

@@ -11,3 +11,8 @@ global using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 global using Microsoft.Extensions.Diagnostics.HealthChecks;
 global using RabbitMQ.Client;
 global using eShopWithoutContainers.BuildingBlocks.EventBus.Events;
+global using Azure.Core;
+global using Azure.Identity;
+global using eShopWithoutContainers.Services.Payment.API;
+global using Microsoft.AspNetCore;
+global using Serilog;
