@@ -4,7 +4,7 @@ public abstract class Entity
     int? _requestedHashCode;
     int _Id;
 
-    public int Id
+    public virtual int Id
     {
         get => _Id; protected set => _Id = value;
     }

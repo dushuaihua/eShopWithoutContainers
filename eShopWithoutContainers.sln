@@ -65,7 +65,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering.API", "src\Service
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B8FEDFCF-3EC4-4672-BBF4-6940E7C130A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordering.Domain", "src\Services\Ordering\Ordering.Domain\Ordering.Domain.csproj", "{4A422BB0-551A-49C1-B257-7211DBB8EC97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering.Domain", "src\Services\Ordering\Ordering.Domain\Ordering.Domain.csproj", "{4A422BB0-551A-49C1-B257-7211DBB8EC97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordering.Infrastructure", "src\Services\Ordering\Ordering.Infrastructure\Ordering.Infrastructure.csproj", "{2949CE70-728F-4521-9299-BF1397313FFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,6 +143,10 @@ Global
 		{4A422BB0-551A-49C1-B257-7211DBB8EC97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A422BB0-551A-49C1-B257-7211DBB8EC97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A422BB0-551A-49C1-B257-7211DBB8EC97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2949CE70-728F-4521-9299-BF1397313FFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2949CE70-728F-4521-9299-BF1397313FFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2949CE70-728F-4521-9299-BF1397313FFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2949CE70-728F-4521-9299-BF1397313FFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -177,6 +183,7 @@ Global
 		{CCD97A99-40CD-435C-A6BC-DEF22A9B314A} = {BBE78D91-5998-44BF-9390-A0DB243F8366}
 		{B8FEDFCF-3EC4-4672-BBF4-6940E7C130A9} = {BBE78D91-5998-44BF-9390-A0DB243F8366}
 		{4A422BB0-551A-49C1-B257-7211DBB8EC97} = {BBE78D91-5998-44BF-9390-A0DB243F8366}
+		{2949CE70-728F-4521-9299-BF1397313FFC} = {BBE78D91-5998-44BF-9390-A0DB243F8366}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {54B30645-11CD-4DB3-9C1F-63600C9748B0}

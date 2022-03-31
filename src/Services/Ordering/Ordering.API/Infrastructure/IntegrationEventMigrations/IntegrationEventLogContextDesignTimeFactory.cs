@@ -1,4 +1,4 @@
-﻿namespace Catalog.API.Infrastructure.IntegrationEventMigrations;
+﻿namespace eShopWithoutContainers.Services.Ordering.API.Infrastructure.IntegrationEventMigrations;
 
 public class IntegrationEventLogContextDesignTimeFactory : IDesignTimeDbContextFactory<IntegrationEventLogContext>
 {

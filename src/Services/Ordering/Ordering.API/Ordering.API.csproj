@@ -31,6 +31,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.HealthChecks" Version="1.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="6.0.3" />
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="6.0.2" />
     <PackageReference Include="Polly" Version="7.2.3" />
@@ -45,6 +49,13 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\IntegrationEventLogEF\IntegrationEventLogEF.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\WebHost\WebHost.Customization\WebHost.Customization.csproj" />
+    <ProjectReference Include="..\Ordering.Domain\Ordering.Domain.csproj" />
+    <ProjectReference Include="..\Ordering.Infrastructure\Ordering.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -2,5 +2,5 @@
 
 需要添加Microsoft.EntityFrameworkCore.Design的引用，并在Mirgrate的程序集里面创建IDesignTimeDbContextFactory
 
-dotnet ef migrations add Initial --context CatalogContext --output-dir Infrastructure/CatalogMigrations
+dotnet ef migrations add Initial --context OrderingContext --output-dir Infrastructure/OrderingMigrations
 dotnet ef migrations add IntegrationEventInitial --context IntegrationEventLogContext --output-dir Infrastructure/IntegrationEventMigrations

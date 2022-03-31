@@ -1,10 +1,3 @@
-using Azure.Core;
-using Azure.Identity;
-using eShopWithoutContainers.Services.Ordering.API;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Serilog;
-using System.Net;
-
 var configuration = GetConfiguration();
 
 try
@@ -13,7 +6,16 @@ try
     var host = BuildWebHost(configuration, args);
 
     Log.Information("Applying migrations ({ApplicationContext})...", AppName);
-    host.MigrationDbContext<OrderingContext>();
+    host.MigrateDbContext<OrderingContext>((context, services) =>
+    {
+        var env = services.GetService<IWebHostEnvironment>();
+        var settings = services.GetService<IOptions<OrderingSettings>>();
+        var logger = services.GetService<ILogger<OrderingContextSeed>>();
+
+        new OrderingContextSeed()
+            .SeedAsync(context, env, settings, logger)
+            .Wait();
+    }).MigrateDbContext<IntegrationEventLogContext>((_, __) => { });
 
     Log.Information("Starting web host ({ApplicationContext})...", AppName);
     host.Run();
@@ -65,7 +67,7 @@ Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
     .Enrich.FromLogContext()
     .WriteTo.Console()
     .WriteTo.Seq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl)
-    .WriteTo.Http(String.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:8080" : logstashUrl)
+    .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:8080" : logstashUrl)
     .ReadFrom.Configuration(configuration)
     .CreateLogger();
 }

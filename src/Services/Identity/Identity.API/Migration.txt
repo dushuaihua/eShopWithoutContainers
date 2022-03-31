@@ -1,5 +1,7 @@
 ﻿dotnet tool install --global dotnet-ef
 
+需要添加Microsoft.EntityFrameworkCore.Design的引用，并在Mirgrate的程序集里面创建IDesignTimeDbContextFactory
+
 dotnet ef migrations add Initial --context ApplicationDbContext --output-dir Migrations/Application
 dotnet ef migrations add Initial --context ConfigurationDbContext --output-dir Migrations/Configuration
 dotnet ef migrations add Initial --context PersistedGrantDbContext --output-dir Migrations/PersistedGrant
