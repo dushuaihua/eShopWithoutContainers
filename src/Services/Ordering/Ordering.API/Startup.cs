@@ -1,7 +1,5 @@
-﻿using eShopWithoutContainers.Services.Ordering.API.Controllers;
-using eShopWithoutContainers.Services.Ordering.API.Infrastructure.Filters;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.OpenApi.Models;
+﻿using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 namespace eShopWithoutContainers.Services.Ordering.API;
 
@@ -23,15 +21,21 @@ public class Startup
                 options.EnableDetailedErrors = true;
             })
             .Services
-            .AddApplicationInsights()
+            .AddApplicationInsights(Configuration)
             .AddCustomMvc()
             .AddHealthChecks(Configuration)
             .AddCustomDbContext(Configuration)
             .AddCustomSwagger(Configuration)
-            .Add;
+            .AddCustomIntegrations(Configuration)
+            .AddCustomConfiguration(Configuration)
+            .AddEventBus(Configuration)
+            .AddCustomAuthentication(Configuration);
 
         var container = new ContainerBuilder();
         container.Populate(services);
+
+        container.RegisterModule(new MediatorModule());
+        container.RegisterModule(new ApplicationModule(Configuration["ConnectionString"]));
 
         return new AutofacServiceProvider(container.Build());
     }
@@ -45,6 +49,69 @@ public class Startup
             loggerFactory.CreateLogger<Startup>().LogDebug("Using PATH_BASE '{pathBase}'", pathBase);
             app.UsePathBase(pathBase);
         }
+
+        app.UseSwagger()
+            .UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint($"{(!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty)}/swagger/v1/swagger.json", "Ordering.API V1");
+                c.OAuthClientId("orderingswaggerui");
+                c.OAuthAppName("Ordering Swagger UI");
+            });
+
+        app.UseRouting();
+        app.UseCors("CorsPolicy");
+        ConfigureAuth(app);
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapGrpcService<OrderingService>();
+            endpoints.MapDefaultControllerRoute();
+            endpoints.MapControllers();
+            endpoints.MapGet("/_proto/", async ctx =>
+            {
+                ctx.Response.ContentType = "text/plain";
+                using var fs = new FileStream(Path.Combine(env.ContentRootPath, "Proto", "ordering.proto"), FileMode.Open, FileAccess.Read);
+                using var sr = new StreamReader(fs);
+                while (!sr.EndOfStream)
+                {
+                    var line = await sr.ReadToEndAsync();
+                    if (line != "/* >>" || line != "<< */")
+                    {
+                        await ctx.Response.WriteAsync(line);
+                    }
+                }
+            });
+
+            endpoints.MapHealthChecks("/hc", new HealthCheckOptions
+            {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
+            endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+            {
+                Predicate = r => r.Name.Contains("self")
+            });
+        });
+
+        ConfigureEventBus(app);
+    }
+
+    private void ConfigureEventBus(IApplicationBuilder app)
+    {
+        var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+
+        eventBus.Subscribe<UserCheckoutAcceptedIntegrationEvent, IIntegrationEventHandler<UserCheckoutAcceptedIntegrationEvent>>();
+        eventBus.Subscribe<GracePeriodConfirmedIntegrationEvent, IIntegrationEventHandler<GracePeriodConfirmedIntegrationEvent>>();
+        eventBus.Subscribe<OrderStockConfirmedIntegrationEvent, IIntegrationEventHandler<OrderStockConfirmedIntegrationEvent>>();
+        eventBus.Subscribe<OrderStockRejectedIntegrationEvent, IIntegrationEventHandler<OrderStockRejectedIntegrationEvent>>();
+        eventBus.Subscribe<OrderPaymentFailedIntegrationEvent, IIntegrationEventHandler<OrderPaymentFailedIntegrationEvent>>();
+        eventBus.Subscribe<OrderPaymentSucceededIntegrationEvent, IIntegrationEventHandler<OrderPaymentSucceededIntegrationEvent>>();
+    }
+
+    protected virtual void ConfigureAuth(IApplicationBuilder app)
+    {
+        app.UseAuthentication();
+        app.UseAuthorization();
     }
 }
 
@@ -65,8 +132,8 @@ static class CustomExtensionsMethods
             options.Filters.Add(typeof(HttpGlobalExceptionFilter));
         })
         .AddApplicationPart(typeof(OrdersController).Assembly)
-        .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
-        //.SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+        .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true)
+        .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
         services.AddCors(options =>
         {
@@ -168,4 +235,142 @@ static class CustomExtensionsMethods
         return services;
     }
 
+    public static IServiceCollection AddCustomIntegrations(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddTransient<IIdentityService, IdentityService>();
+        services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(sp => (DbConnection c) => new IntegrationEventLogService(c));
+        services.AddTransient<IOrderingIntegrationEventService, OrderingIntegrationEventService>();
+
+        if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
+        {
+            services.AddSingleton<IServiceBusPersisterConnection>(sp =>
+            {
+                var serviceBusConnectionString = configuration["EventBusConnection"];
+
+                var subscriptionClientName = configuration["SubscriptionClientName"];
+
+                return new DefaultServiceBusPersisterConnection(serviceBusConnectionString);
+            });
+        }
+        else
+        {
+            services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
+            {
+                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+
+                var factory = new ConnectionFactory
+                {
+                    HostName = configuration["EventBusConnection"],
+                    DispatchConsumersAsync = true
+                };
+
+                if (!string.IsNullOrEmpty(configuration["EventBusUserName"]))
+                {
+                    factory.UserName = configuration["EventBusUserName"];
+                }
+
+                if (!string.IsNullOrEmpty(configuration["EventBusPassword"]))
+                {
+                    factory.Password = configuration["EventBusPassword"];
+                }
+
+                var retryCount = 5;
+                if (!string.IsNullOrEmpty(configuration["EventBusRetryCount"]))
+                {
+                    retryCount = int.Parse(configuration["EventBusRetryCount"]);
+                }
+
+                return new DefaultRabbitMQPersistentConnection(factory, logger, retryCount);
+            });
+        }
+
+        return services;
+    }
+
+    public static IServiceCollection AddCustomConfiguration(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddOptions();
+        services.Configure<OrderingSettings>(configuration);
+        services.Configure<ApiBehaviorOptions>(options =>
+        {
+            options.InvalidModelStateResponseFactory = context =>
+            {
+                var problemDetails = new ValidationProblemDetails(context.ModelState)
+                {
+                    Instance = context.HttpContext.Request.Path,
+                    Status = StatusCodes.Status400BadRequest,
+                    Detail = "Please refer to the errors property for additional details."
+                };
+
+                return new BadRequestObjectResult(problemDetails)
+                {
+                    ContentTypes = { "application/problem+json", "application/problem+xml" }
+                };
+            };
+        });
+
+        return services;
+    }
+
+    public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
+    {
+        if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
+        {
+            services.AddSingleton<IEventBus, EventBusServiceBus>(sp =>
+            {
+                var serviceBusPersisterConnection = sp.GetRequiredService<IServiceBusPersisterConnection>();
+                var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
+                var logger = sp.GetRequiredService<ILogger<EventBusServiceBus>>();
+                var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+                string SubscriptionClientName = configuration["SubscriptionClientName"];
+
+                return new EventBusServiceBus(serviceBusPersisterConnection, logger,
+                    eventBusSubscriptionsManager, iLifetimeScope, SubscriptionClientName);
+            });
+        }
+        else
+        {
+            services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
+            {
+                var subscriptionClientName = configuration["SubscriptionClientName"];
+                var rabbitMQPersistentCConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
+                var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
+                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
+                var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+
+                var retryCount = 5;
+                if (!string.IsNullOrEmpty(configuration["EventBusRetryCount"]))
+                {
+                    retryCount = int.Parse(configuration["EventBusRetryCount"]);
+                }
+
+                return new EventBusRabbitMQ(rabbitMQPersistentCConnection, logger, iLifetimeScope, eventBusSubscriptionsManager, subscriptionClientName, retryCount);
+            });
+        }
+
+        services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
+        return services;
+    }
+
+    public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
+    {
+        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
+
+        var identityUrl = configuration.GetValue<string>("IdentityUrl");
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+        }).AddJwtBearer(options =>
+        {
+            options.Authority = identityUrl;
+            options.RequireHttpsMetadata = false;
+            options.Audience = "orders";
+        });
+
+        return services;
+    }
 }

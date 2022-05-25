@@ -1,4 +1,5 @@
 ﻿namespace eShopWithoutContainers.Services.Ordering.API.Infrastructure;
+using eShopWithoutContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
 
 public class OrderingContextSeed
 {

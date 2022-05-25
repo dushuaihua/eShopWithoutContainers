@@ -1,12 +1,11 @@
-﻿global using eShopWithoutContainers.Services.Ordering.Domain.SeedWork;
-global using eShopWithoutContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
-global using eShopWithoutContainers.Services.Ordering.Infrastructure.Idempotency;
-global using eShopWithoutContainers.Services.Ordering.Domain.Exceptions;
+﻿global using eShopWithoutContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
 global using eShopWithoutContainers.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
+global using eShopWithoutContainers.Services.Ordering.Domain.Exceptions;
+global using eShopWithoutContainers.Services.Ordering.Domain.SeedWork;
 global using eShopWithoutContainers.Services.Ordering.Infrastructure.EntityConfigurations;
+global using eShopWithoutContainers.Services.Ordering.Infrastructure.Idempotency;
+global using MediatR;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
-global using MediatR;
 global using Microsoft.EntityFrameworkCore.Storage;
 global using System.Data;
-global using Microsoft.EntityFrameworkCore.Design;
