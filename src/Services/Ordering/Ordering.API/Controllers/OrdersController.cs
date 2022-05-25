@@ -1,8 +1,4 @@
-﻿using CardType = eShopWithoutContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate.CardType;
-using CreateOrderDraftCommand = eShopWithoutContainers.Services.Ordering.API.Application.Commands.CreateOrderDraftCommand;
-using OrderDraftDTO = eShopWithoutContainers.Services.Ordering.API.Application.Commands.OrderDraftDTO;
-
-namespace eShopWithoutContainers.Services.Ordering.API.Controllers;
+﻿namespace eShopWithoutContainers.Services.Ordering.API.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize]

@@ -1,5 +1,4 @@
 ﻿namespace eShopWithoutContainers.Services.Ordering.API.Application.Commands;
-
 public class IdentifiedCommandHandler<T, R> : IRequestHandler<IdentifiedCommand<T, R>, R> where T : IRequest<R>
 {
     private readonly IMediator _mediator;

@@ -1,5 +1,4 @@
 ﻿namespace eShopWithoutContainers.Services.Ordering.API.Application.Commands;
-
 public class ShipOrderCommand : IRequest<bool>
 {
     [DataMember]

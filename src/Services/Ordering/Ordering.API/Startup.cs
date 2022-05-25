@@ -1,7 +1,4 @@
-﻿using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-
-namespace eShopWithoutContainers.Services.Ordering.API;
+﻿namespace eShopWithoutContainers.Services.Ordering.API;
 
 public class Startup
 {
@@ -64,7 +61,7 @@ public class Startup
 
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapGrpcService<OrderingService>();
+            endpoints.MapGrpcService<GrpcOrdering.OrderingService>();
             endpoints.MapDefaultControllerRoute();
             endpoints.MapControllers();
             endpoints.MapGet("/_proto/", async ctx =>

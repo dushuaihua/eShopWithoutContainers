@@ -1,5 +1,4 @@
 ﻿namespace eShopWithoutContainers.Services.Ordering.API.Application.Commands;
-using eShopWithoutContainers.Services.Ordering.API.Application.Models;
 
 public class CreateOrderDraftCommand : IRequest<OrderDraftDTO>
 {

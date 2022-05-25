@@ -1,6 +1,4 @@
 ﻿namespace eShopWithoutContainers.Services.Ordering.API.Application.Commands;
-using static eShopWithoutContainers.Services.Ordering.API.Application.Commands.CreateOrderCommand;
-
 public class CreateOrderDraftCommandHandler : IRequestHandler<CreateOrderDraftCommand, OrderDraftDTO>
 {
     private readonly IOrderRepository _orderRepository;
