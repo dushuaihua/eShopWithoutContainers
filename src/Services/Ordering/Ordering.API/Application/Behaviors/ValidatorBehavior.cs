@@ -1,11 +1,11 @@
 ﻿namespace eShopWithoutContainers.Services.Ordering.API.Application.Behaviors;
 
-public class ValidatorBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
+public class ValidatorBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
 {
-    private readonly ILogger<ValidatorBehaviour<TRequest, TResponse>> _logger;
+    private readonly ILogger<ValidatorBehavior<TRequest, TResponse>> _logger;
     private readonly IEnumerable<IValidator<TRequest>> _validators;
 
-    public ValidatorBehaviour(ILogger<ValidatorBehaviour<TRequest, TResponse>> logger, IEnumerable<IValidator<TRequest>> validators)
+    public ValidatorBehavior(ILogger<ValidatorBehavior<TRequest, TResponse>> logger, IEnumerable<IValidator<TRequest>> validators)
     {
         _logger = logger;
         _validators = validators;

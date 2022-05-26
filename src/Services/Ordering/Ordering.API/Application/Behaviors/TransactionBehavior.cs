@@ -1,12 +1,12 @@
 ﻿namespace eShopWithoutContainers.Services.Ordering.API.Application.Behaviors;
 
-public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
+public class TransactionBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
 {
-    private readonly ILogger<TransactionBehaviour<TRequest, TResponse>> _logger;
+    private readonly ILogger<TransactionBehavior<TRequest, TResponse>> _logger;
     private readonly OrderingContext _dbContext;
     private readonly IOrderingIntegrationEventService _orderingIntegrationEventService;
 
-    public TransactionBehaviour(ILogger<TransactionBehaviour<TRequest, TResponse>> logger, OrderingContext dbContext, IOrderingIntegrationEventService orderingIntegrationEventService)
+    public TransactionBehavior(ILogger<TransactionBehavior<TRequest, TResponse>> logger, OrderingContext dbContext, IOrderingIntegrationEventService orderingIntegrationEventService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));

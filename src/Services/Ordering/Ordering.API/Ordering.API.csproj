@@ -61,7 +61,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\DomainEventHandlers\" />
     <Folder Include="Infrastructure\Auth\" />
     <Folder Include="Setup\" />
   </ItemGroup>
