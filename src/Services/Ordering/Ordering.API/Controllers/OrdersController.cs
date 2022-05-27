@@ -77,7 +77,7 @@ public class OrdersController : ControllerBase
     [HttpGet]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
-    public async Task<IActionResult> GetOrderAsync(int orderId)
+    public async Task<ActionResult> GetOrderAsync(int orderId)
     {
         try
         {
