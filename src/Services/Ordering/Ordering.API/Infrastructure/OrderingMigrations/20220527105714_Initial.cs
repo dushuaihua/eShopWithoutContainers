@@ -32,7 +32,7 @@ namespace eShopWithoutContainers.Services.Ordering.API.Infrastructure.OrderingMi
                 incrementBy: 10);
 
             migrationBuilder.CreateTable(
-                name: "buys",
+                name: "buyers",
                 schema: "ordering",
                 columns: table => new
                 {
@@ -42,7 +42,7 @@ namespace eShopWithoutContainers.Services.Ordering.API.Infrastructure.OrderingMi
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_buys", x => x.Id);
+                    table.PrimaryKey("PK_buyers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -102,10 +102,10 @@ namespace eShopWithoutContainers.Services.Ordering.API.Infrastructure.OrderingMi
                 {
                     table.PrimaryKey("PK_paymentMethods", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_paymentMethods_buys_Id",
+                        name: "FK_paymentMethods_buyers_Id",
                         column: x => x.Id,
                         principalSchema: "ordering",
-                        principalTable: "buys",
+                        principalTable: "buyers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -138,10 +138,10 @@ namespace eShopWithoutContainers.Services.Ordering.API.Infrastructure.OrderingMi
                 {
                     table.PrimaryKey("PK_orders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_orders_buys_BuyerId",
+                        name: "FK_orders_buyers_BuyerId",
                         column: x => x.BuyerId,
                         principalSchema: "ordering",
-                        principalTable: "buys",
+                        principalTable: "buyers",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_orders_orderstatus_OrderStatusId",
@@ -191,9 +191,9 @@ namespace eShopWithoutContainers.Services.Ordering.API.Infrastructure.OrderingMi
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_buys_IdentityGuid",
+                name: "IX_buyers_IdentityGuid",
                 schema: "ordering",
-                table: "buys",
+                table: "buyers",
                 column: "IdentityGuid",
                 unique: true);
 
@@ -251,7 +251,7 @@ namespace eShopWithoutContainers.Services.Ordering.API.Infrastructure.OrderingMi
                 schema: "ordering");
 
             migrationBuilder.DropTable(
-                name: "buys",
+                name: "buyers",
                 schema: "ordering");
 
             migrationBuilder.DropTable(

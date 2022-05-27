@@ -19,7 +19,7 @@ public class OrderingContext : DbContext, IUnitOfWork
 
     public bool HasActiveTransaction => _currentTransaction != null;
 
-    public OrderingContext(DbContextOptions<OrderingContext> options, IMediator mediator)
+    public OrderingContext(DbContextOptions<OrderingContext> options, IMediator mediator) : base(options)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 

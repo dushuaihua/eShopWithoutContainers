@@ -12,7 +12,7 @@ using eShopWithoutContainers.Services.Ordering.Infrastructure;
 namespace eShopWithoutContainers.Services.Ordering.API.Infrastructure.OrderingMigrations
 {
     [DbContext(typeof(OrderingContext))]
-    [Migration("20220331164323_Initial")]
+    [Migration("20220527105714_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,7 +58,7 @@ namespace eShopWithoutContainers.Services.Ordering.API.Infrastructure.OrderingMi
                     b.HasIndex("IdentityGuid")
                         .IsUnique();
 
-                    b.ToTable("buys", "ordering");
+                    b.ToTable("buyers", "ordering");
                 });
 
             modelBuilder.Entity("eShopWithoutContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate.CardType", b =>

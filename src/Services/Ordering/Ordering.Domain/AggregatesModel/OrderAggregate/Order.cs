@@ -14,7 +14,6 @@ public class Order : Entity, IAggregateRoot
     private string _description;
 
     private bool _isDraft;
-
     public decimal Total => _orderItems.Sum(o => o.Units * o.UnitPrice);
 
     private readonly List<OrderItem> _orderItems;

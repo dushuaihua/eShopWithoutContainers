@@ -56,7 +56,7 @@ namespace eShopWithoutContainers.Services.Ordering.API.Infrastructure.OrderingMi
                     b.HasIndex("IdentityGuid")
                         .IsUnique();
 
-                    b.ToTable("buys", "ordering");
+                    b.ToTable("buyers", "ordering");
                 });
 
             modelBuilder.Entity("eShopWithoutContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate.CardType", b =>
