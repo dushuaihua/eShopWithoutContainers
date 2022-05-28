@@ -1,4 +1,3 @@
-using Order = eShopWithoutContainers.Services.Ordering.Domain.AggregatesModel.OrderAggregate.Order;
 namespace Ordering.UnitTests;
 
 public class AddressBuilder

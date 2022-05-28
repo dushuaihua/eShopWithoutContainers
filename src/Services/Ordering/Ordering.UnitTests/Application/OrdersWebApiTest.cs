@@ -1,7 +1,4 @@
-﻿using CardType = eShopWithoutContainers.Services.Ordering.API.Application.Queries.CardType;
-using Order = eShopWithoutContainers.Services.Ordering.API.Application.Queries.Order;
-
-namespace Ordering.UnitTests.Application;
+﻿namespace Ordering.UnitTests.Application;
 public class OrdersWebApiTest
 {
     private readonly Mock<IMediator> _mediatorMock;
@@ -78,7 +75,7 @@ public class OrdersWebApiTest
     public async Task Get_order_success()
     {
         var fakeOrderId = 123;
-        var fakeDynamicResult = new Order();
+        var fakeDynamicResult = new eShopWithoutContainers.Services.Ordering.API.Application.Queries.Order();
         _ordersQueriesMock.Setup(x => x.GetOrderAsync(It.IsAny<int>())).Returns(Task.FromResult(fakeDynamicResult));
 
         var orderController = new OrdersController(_mediatorMock.Object, _ordersQueriesMock.Object, _identityServiceMock.Object, _loggerMock.Object);
