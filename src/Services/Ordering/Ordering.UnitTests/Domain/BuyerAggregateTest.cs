@@ -80,6 +80,8 @@ public class BuyerAggregateTest
 
         var fakePaymentMethod = new PaymentMethod(cardTypeId, alias, cardNumber, securityNumber, cardNumber, expiration);
         var result = fakePaymentMethod.IsEqualTo(cardTypeId, cardNumber, expiration);
+
+        Assert.True(result);
     }
 
     [Fact]
